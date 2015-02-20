@@ -1,5 +1,5 @@
 
-@namespace("org.ga4gh")
+@namespace("org.ga4gh.methods")
 /**
 This protocol defines genotype to phenotype relationships
 query system
@@ -8,7 +8,7 @@ protocol GenotypePhenotypeMethods {
 
 
 import idl "genotypephenotype.avdl";
-import idl "../methods.avdl";
+import idl "methods.avdl";
 
 /******************  /genotypephenotype/search  *********************/
 
@@ -62,7 +62,7 @@ record SearchGenotypePhenotypeResponse {
   /**
   The list of matching VariantPhenotypeAssociation.
   */
-  array<org.ga4gh.VariantPhenotypeAssociation> associations = [];
+  array<org.ga4gh.models.Association> associations = [];
 
   /**
   The continuation token, which is used to page through large result sets.

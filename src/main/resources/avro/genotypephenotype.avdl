@@ -1,12 +1,13 @@
-@namespace("org.ga4gh")
+@namespace("org.ga4gh.models")
 /**
 This protocol defines genotype to phenotype relationships
 */
 protocol GenotypePhenotype {
 
-import idl "../common.avdl";
-import idl "../variants.avdl";
-import idl "../metadata.avdl";
+import idl "common.avdl";
+import idl "variants.avdl";
+import idl "metadata.avdl";
+import idl "sequenceAnnotations.avdl";
 
 
 /**
@@ -47,12 +48,14 @@ record Phenotype {
   /** A textual description of the phenotype. This is used to complement the structured phenotype description in the phenotype field */
   union { null, string } description = null;
 
+  /** If there is a specific numeric value associated with the phenotype, it is here */
+  union { null, float, int } value = null;
+
   /**
     the environmental context in which the phenotype arises.
     multiple contexts can be specified - these are assumed to all hold together
   */
   array<EnvironmentalContext> environmentalContexts;
-
 
 }
 
@@ -71,25 +74,45 @@ record Evidence {
 }
 
 /**
+Different Types of associations
+*/
+
+enum AssociationType {
+  VARIANT_PHENOTYPE,
+  VARIANT_GENOMICFEATURE,
+  GENOMICFEATURE_PHENOTYPE
+}
+
+
+/**
 An association between a variant or variant set and a phenotype
 */
-record VariantPhenotypeAssociation {
+record Association {
+
+  /** a unique string that identifies this association. If two associations records
+     have the same id, they should be considered the same.
+  */
   string id;
+
+  /** an association type. Based on this selection, the optional fields that
+
+  AssociationType type;
+
+  Evidence evidence;
 
   /**
     The set of variants of the organism that bears the phenotype.
     If the goal is to associate a single variant, then a singleton VariantSet is used
   */
-  org.ga4gh.models.VariantSet variant;
-
-  Evidence evidence;
+  union {null, org.ga4gh.models.VariantSet} variant = null;
 
   /**
     The phenotypic component of this association.
-    Note that we delegate this to a separate record to allow us the flexibility to composition of phenotype
-    associations with records that are not variant sets - for example, diseases.
   */
-  Phenotype phenotype;
+  union {null, org.ga4gh.models.Phenotype} phenotype = null;
+
+
+  union {null, org.ga4gh.models.FeatureSet} feature = null;
 
 }
 
