@@ -94,7 +94,9 @@ record Association {
   */
   string id;
 
-  /** an association type. Based on this selection, the optional fields that
+  /** an association type. Based on this selection, different pair of optional fields
+  in this record will form a relationship
+  */
 
   AssociationType type;
 

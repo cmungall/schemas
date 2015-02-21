@@ -8,6 +8,7 @@ protocol GenotypePhenotypeMethods {
 
 
 import idl "genotypephenotype.avdl";
+import idl "variantmethods.avdl";
 import idl "methods.avdl";
 
 /******************  /genotypephenotype/search  *********************/
@@ -17,18 +18,13 @@ import idl "methods.avdl";
 /**
 Evidence for the phenotype association.
 */
-record EvidenceQuery {
+record SearchEvidenceRequest {
   /** ECO or OBI is recommended */
   org.ga4gh.models.OntologyTerm evidenceType;
 }
 
 
-record VariantQuery {
-
-}
-
-
-record PhenotypeQuery {
+record SearchPhenotypeRequest {
 
 
 }
@@ -36,11 +32,11 @@ record PhenotypeQuery {
 /** This request maps to the body of `POST /genotyphenotype/search` as JSON. */
 record SearchGenotypePhenotypeRequest {
 
-  union { null, VariantQuery }  variant = null;
+  union { null, org.ga4gh.methods.SearchVariantsRequest }  variant = null;
 
-  union { null, EvidenceQuery } evidence = null;
+  union { null, org.ga4gh.methods.SearchEvidenceRequest } evidence = null;
 
-  union { null, PhenotypeQuery } phenotype = null;
+  union { null, org.ga4gh.methods.SearchPhenotypeRequest } phenotype = null;
 
   /**
   Specifies the maximum number of results to return in a single page.
