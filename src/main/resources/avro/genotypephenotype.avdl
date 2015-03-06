@@ -79,8 +79,9 @@ Different Types of associations
 
 enum AssociationType {
   VARIANT_PHENOTYPE,
-  VARIANT_GENOMICFEATURE,
-  GENOMICFEATURE_PHENOTYPE
+  GENOMICFEATURE_PHENOTYPE,
+  SAMPLE_PHENOTYPE,
+  INDIVIDUAL_PHENOTYPE
 }
 
 
@@ -113,8 +114,11 @@ record Association {
   */
   union {null, org.ga4gh.models.Phenotype} phenotype = null;
 
-
   union {null, org.ga4gh.models.FeatureSet} feature = null;
+
+  union {null, org.ga4gh.models.Individual} individual = null;
+
+  union {null, org.ga4gh.models.Sample} sample = null;
 
 }
 
