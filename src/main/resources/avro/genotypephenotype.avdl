@@ -81,12 +81,18 @@ enum AssociationType {
   VARIANT_PHENOTYPE,
   GENOMICFEATURE_PHENOTYPE,
   SAMPLE_PHENOTYPE,
-  INDIVIDUAL_PHENOTYPE
+  INDIVIDUAL_PHENOTYPE,
+  SAMPLE_PHENOTYPE
 }
 
 
 /**
-An association between a variant or variant set and a phenotype
+An association connects different components of the GA4GH API via some
+evidence(such as literature, observation, or computational prediction)
+The association connection type is denoted by the 'type' field. Based of the
+association type, different optional fields will need to be filled out.
+For example, the association is VARIANT_PHENOTYPE, then the variant and phenotype
+fields will need to be filled out
 */
 record Association {
 
@@ -95,30 +101,47 @@ record Association {
   */
   string id;
 
-  /** an association type. Based on this selection, different pair of optional fields
+  /** An association type. Based on this selection, different pair of optional fields
   in this record will form a relationship
   */
-
   AssociationType type;
 
+  /**
+    The evidence for this association
+  */
   Evidence evidence;
 
   /**
     The set of variants of the organism that bears the phenotype.
-    If the goal is to associate a single variant, then a singleton VariantSet is used
+    If the goal is to associate a single variant, then a singleton VariantSet is used.
+    This should be non null for: VARIANT_PHENOTYPE
   */
   union {null, org.ga4gh.models.VariantSet} variant = null;
 
   /**
-    The phenotypic component of this association.
+    The Genotype feature for this association
+    This should be non null for: GENOMICFEATURE_PHENOTYPE
   */
-  union {null, org.ga4gh.models.Phenotype} phenotype = null;
-
   union {null, org.ga4gh.models.FeatureSet} feature = null;
 
+  /**
+    The Individual for this association
+    This should be non null for: INDIVIDUAL_PHENOTYPE
+  */
   union {null, org.ga4gh.models.Individual} individual = null;
 
+  /**
+    The Sample for this association
+    This should be non null for: SAMPLE_PHENOTYPE
+  */
   union {null, org.ga4gh.models.Sample} sample = null;
+
+  /**
+    The phenotypic component of this association.
+    This should be non null for: VARIANT_PHENOTYPE, GENOMICFEATURE_PHENOTYPE,
+    SAMPLE_PHENOTYPE, INDIVIDUAL_PHENOTYPE
+  */
+  union {null, org.ga4gh.models.Phenotype} phenotype = null;
 
 }
 
