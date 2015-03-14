@@ -69,12 +69,6 @@ record Individual {
   array<OntologyTerm> diseases = [];
 
   /**
-  Phenotypes for this individual.
-  TODO: Is this the right representation?
-  */
-  array<OntologyTerm> phenotypes = [];
-
-  /**
   Disease area specific classification (e.g. classification of cancer samples
   such as Dukes)
   */
@@ -137,12 +131,12 @@ record Sample {
 
   /**
   The cell type of this sample.
-  Using the [Cell Ontology](http://cellontology.org/) (CL) is recommended. See 
+  Using the [Cell Ontology](http://cellontology.org/) (CL) is recommended. See
   */
   union { null, OntologyTerm } cellType = null;
 
-  /** 
-  The cell line of this sample. 
+  /**
+  The cell line of this sample.
   Using the [Cell Line Ontology](https://code.google.com/p/clo-ontology/) is a possibility.
   TODO: discuss further. Other possibilities: Cellosaurus (nextprot), BRENDA/BTO, EFO (EBI)
   */
