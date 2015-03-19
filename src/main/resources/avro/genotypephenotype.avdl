@@ -93,7 +93,7 @@ record Association {
     If the goal is to associate a single variant, then a singleton VariantSet is used.
     This should be non null for: VARIANT_PHENOTYPE
   */
-  union {null, org.ga4gh.models.VariantSet} variant = null;
+  union {null, array<org.ga4gh.models.Variant>} variants = null;
 
   /**
     The Genotype feature for this association
