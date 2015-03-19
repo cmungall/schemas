@@ -48,6 +48,9 @@ record PhenotypeInstance {
   /** A textual description of the phenotype. This is used to complement the structured phenotype description in the phenotype field */
   union { null, string } description = null;
 
+  /** If there is a specific numeric value associated with the phenotype, it is here */
+  union { null, float, int } value = null;
+
 }
 
 
