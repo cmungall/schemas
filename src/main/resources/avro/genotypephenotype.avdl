@@ -53,6 +53,60 @@ record PhenotypeInstance {
 
 }
 
+/**
+A predictive Model. Usually provided as part of
+evidence for an association.
+*/
+record Model {
+
+  /** a unique string that identifies this model. If two model records
+   have the same id, they should be considered the same.
+  */
+  string id;
+
+  /** Ontology Term describing the type of model that does the prediction */
+  org.ga4gh.models.OntologyTerm modelType;
+
+  /** Evidence performance metric
+  If the evidence is a predictive method,
+  a value recording its performance, usually a value derived from
+  testing against a background model, can be recorded.
+  This is usually in the form of a area under the curve of
+  Receiver Operating Characteristic (au_roc)
+  */
+  union { null, float } performance = null;
+
+  /** Name of the performance metric
+   If a performance value has been associated with an evidence
+   then type of metric used should be described.
+   Valid selections include:
+   au_roc : Area Under Receiver Operating Characteristic
+   au_pr  : Area Under Precision-Recall
+  */
+  union { null, string } performanceMetric = null;
+
+  /** A map of major components of the model
+   Elements important to a model, can be described
+   in the components list. For linear regression
+   models the components could be the coefficients
+   attached to each of the input features
+  */
+  union { null, map<float> } components = null;
+
+  /** The Feature Space is the type of data used
+   for the input features in the model.
+   For "example org.ga4gh.models.VariantSet" if the model
+   uses variants as the inputs
+  **/
+  union { null, string } featureSpace = null;
+
+  /** The label Space is the type of data used
+   for the output label in the model.
+   For example, "org.ga4gh.models.Phenotype" if the model
+   predicts phenotype status
+  **/
+  union { null, string } labelSpace = null;
+}
 
 /**
 Evidence for the phenotype association.
@@ -61,6 +115,9 @@ record Evidence {
 
   /** ECO or OBI is recommended */
   org.ga4gh.models.OntologyTerm evidenceType;
+
+  /** If the evidence is from a predicted model, it can be described */
+  union { null, org.ga4gh.models.Model } model = null;
 
   /** A textual description of the evidence. This is used to complement the structured description in the evidenceType field */
   union { null, string } description = null;
@@ -76,8 +133,12 @@ record Association {
   /**
     The evidence for this association
   */
-
   Evidence evidence;
+
+  /**
+    The weight of association, usually for predictive models
+  */
+  union {null, float} weight = null;
 
   /** A textual description of the phenotype. This is used to complement the structured phenotype description in the phenotype field */
   union { null, string } description = null;
