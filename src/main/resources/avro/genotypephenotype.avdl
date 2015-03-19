@@ -1,13 +1,13 @@
-@namespace("org.ga4gh")
+@namespace("org.ga4gh.models")
 /**
 This protocol defines genotype to phenotype relationships
 */
 protocol GenotypePhenotype {
 
-import idl "../common.avdl";
-import idl "../variants.avdl";
-import idl "../metadata.avdl";
-import idl "../sequenceAnnotations.avdl";
+import idl "common.avdl";
+import idl "variants.avdl";
+import idl "metadata.avdl";
+import idl "sequenceAnnotations.avdl";
 
 
 /**
@@ -36,7 +36,7 @@ record PhenotypeInstance {
   union { null, string } id;
 
   /** HPO is recommended */
-  org.ga4gh.models.OntologyTerm type;
+  org.ga4gh.models.OntologyTerm phenotype;
 
   /** HPO is recommended */
   union { null, org.ga4gh.models.OntologyTerm } qualifier = null;
@@ -67,22 +67,14 @@ record Evidence {
 /**
 An association between a variant or variant set and a phenotype
 */
-record FeaturePhenotypeAssociation {
+record Association {
   string id;
 
   /**
-    The set of features of the organism that bears the phenotype.
+    The evidence for this association
   */
-  array<org.ga4gh.models.Feature> features;
 
   Evidence evidence;
-
-  /**
-    The phenotypic component of this association.
-    Note that we delegate this to a separate record to allow us the flexibility to composition of phenotype
-    associations with records that are not variant sets - for example, diseases.
-  */
-  PhenotypeInstance phenotype;
 
   /** A textual description of the phenotype. This is used to complement the structured phenotype description in the phenotype field */
   union { null, string } description = null;
@@ -93,8 +85,39 @@ record FeaturePhenotypeAssociation {
   */
   array<EnvironmentalContext> environmentalContexts;
 
-}
+  /**
+    The set of variants of the organism that bears the phenotype.
+    If the goal is to associate a single variant, then a singleton VariantSet is used.
+    This should be non null for: VARIANT_PHENOTYPE
+  */
+  union {null, org.ga4gh.models.VariantSet} variant = null;
 
+  /**
+    The Genotype feature for this association
+    This should be non null for: GENOMICFEATURE_PHENOTYPE
+  */
+  union {null, array<org.ga4gh.models.Feature>} features = null;
+
+  /**
+    The Individual for this association
+    This should be non null for: INDIVIDUAL_PHENOTYPE
+  */
+  union {null, org.ga4gh.models.Individual} individual = null;
+
+  /**
+    The Sample for this association
+    This should be non null for: SAMPLE_PHENOTYPE
+  */
+  union {null, org.ga4gh.models.Sample} sample = null;
+
+  /**
+    The phenotypic component of this association.
+    This should be non null for: VARIANT_PHENOTYPE, GENOMICFEATURE_PHENOTYPE,
+    SAMPLE_PHENOTYPE, INDIVIDUAL_PHENOTYPE
+  */
+  union {null, org.ga4gh.models.PhenotypeInstance} phenotype = null;
+
+}
 
 
 }
